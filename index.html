@@ -450,6 +450,20 @@ body.imm-on{overflow:hidden}
   .bottomnav{padding-left:max(4px,env(safe-area-inset-left));padding-right:max(4px,env(safe-area-inset-right))}
   .overlay{padding-top:max(4vh,env(safe-area-inset-top));padding-bottom:max(4vh,env(safe-area-inset-bottom))}
 }
+
+/* v1.3.1 manual rotate fallback (portrait viewport only) */
+@media (orientation:portrait){
+  #imm.rot-cw,#imm.rot-ccw{width:100vh;width:100dvh;height:100vw;height:100dvw;top:0;left:0;right:auto;bottom:auto;transform-origin:top left;
+    padding:max(14px,env(safe-area-inset-left)) 22px max(12px,env(safe-area-inset-right)) 22px;--w:calc(100dvh - 44px)}
+  #imm.rot-cw{transform:translateX(100vw) rotate(90deg);transform:translateX(100dvw) rotate(90deg)}
+  #imm.rot-ccw{transform:translateY(100vh) rotate(-90deg);transform:translateY(100dvh) rotate(-90deg)}
+  #imm.rot-cw .imm-clock,#imm.rot-ccw .imm-clock{font-size:min(calc(var(--w) * .62 / var(--em)),56dvw)}
+  #imm.rot-cw .imm-bottom,#imm.rot-ccw .imm-bottom{padding-bottom:0}
+  #imm.rot-cw .imm-brand,#imm.rot-ccw .imm-brand{font-size:10px}
+  #imm.rot-cw .imm-btns .btn,#imm.rot-cw .imm-btns .seg button,#imm.rot-ccw .imm-btns .btn,#imm.rot-ccw .imm-btns .seg button{min-height:40px;padding-top:4px;padding-bottom:4px}
+  #imm.rot-cw .imm-notes,#imm.rot-ccw .imm-notes{font-size:11.5px}
+  #imm.rot-cw .imm-rule,#imm.rot-ccw .imm-rule{margin:6px 0 5px}
+}
 </style>
 </head>
 <body style="--waves:url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'60'%20height%3D'30'%3E%3Cg%20fill%3D'none'%20stroke%3D'%23C6AF88'%20stroke-width%3D'.8'%3E%3Ccircle%20cx%3D'0'%20cy%3D'30'%20r%3D'28'%2F%3E%3Ccircle%20cx%3D'0'%20cy%3D'30'%20r%3D'22'%2F%3E%3Ccircle%20cx%3D'0'%20cy%3D'30'%20r%3D'16'%2F%3E%3Ccircle%20cx%3D'0'%20cy%3D'30'%20r%3D'10'%2F%3E%3Ccircle%20cx%3D'60'%20cy%3D'30'%20r%3D'28'%2F%3E%3Ccircle%20cx%3D'60'%20cy%3D'30'%20r%3D'22'%2F%3E%3Ccircle%20cx%3D'60'%20cy%3D'30'%20r%3D'16'%2F%3E%3Ccircle%20cx%3D'60'%20cy%3D'30'%20r%3D'10'%2F%3E%3Ccircle%20cx%3D'30'%20cy%3D'15'%20r%3D'28'%2F%3E%3Ccircle%20cx%3D'30'%20cy%3D'15'%20r%3D'22'%2F%3E%3Ccircle%20cx%3D'30'%20cy%3D'15'%20r%3D'16'%2F%3E%3Ccircle%20cx%3D'30'%20cy%3D'15'%20r%3D'10'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E")">
@@ -1691,8 +1705,8 @@ boot();
  * timestamp calculations (focusMs / remainingMs) as the normal timer page.
  * Pause/resume go through the existing timerPause/timerResume; the 150 s heartbeat safeguard is untouched.
  */
-const IMM = { open: false, mode: 'elapsed', wake: null, notes: {}, hideT: 0, ctlOn: true, last: '', opener: null };
-try { if (localStorage.getItem('neko.immMode') === 'remaining') IMM.mode = 'remaining'; } catch (_) {}
+const IMM = { rot: 0, open: false, mode: 'elapsed', wake: null, notes: {}, hideT: 0, ctlOn: true, last: '', opener: null };
+try { if (localStorage.getItem('neko.immMode') === 'remaining') IMM.mode = 'remaining'; const r = Number(localStorage.getItem('neko.immRot')); if (r === 90 || r === -90) IMM.rot = r; } catch (_) {}
 
 const immEl = () => document.getElementById('imm');
 function immBuild() {
@@ -1705,6 +1719,7 @@ function immBuild() {
     <div class="imm-bottom" id="immCtl"><div class="imm-notes" id="immNotes" role="status" aria-live="polite"></div>
       <div class="imm-btns"><button class="btn" data-act="imm-exit">${icon('x', 16)} 離開</button>
       <div class="seg" role="group" aria-label="顯示模式"><button data-act="imm-mode" data-mode="elapsed" aria-pressed="true">經過時間</button><button data-act="imm-mode" data-mode="remaining" aria-pressed="false">剩餘時間</button></div>
+      <button class="btn" data-act="imm-rot" id="immRot" aria-pressed="false">${icon('expand', 16)} 旋轉畫面：關</button>
       <button class="btn" data-act="imm-pp" id="immPP">${icon('pause', 16)} 暫停</button></div></div>`;
   d.addEventListener('click', e => { if (e.target.closest('button')) return; immSetCtl(!IMM.ctlOn); });
   document.body.appendChild(d); return d;
@@ -1750,11 +1765,11 @@ ACT['imm-open'] = async el => {
   IMM.open = true; IMM.opener = el || null; IMM.notes = {}; IMM.last = '';
   const d = immBuild(); d.hidden = false; document.body.classList.add('imm-on');
   immInertTargets().forEach(n => { try { n.inert = true; } catch (_) {} });
-  paintImm(); immSetCtl(true, 6000);
+  immApplyRot(); paintImm(); immSetCtl(true, 6000);
   const b = d.querySelector('[data-act=imm-exit]'); if (b) b.focus({ preventScroll: true });
   immWake();                                           // wake lock first: it is the one that matters
   const fs = await immFullscreen(); if (fs && IMM.open) immOrient(); else if (!fs) immNote('ori', '請手動把手機橫放以獲得最大的顯示。');
-  if ((window.innerHeight > window.innerWidth)) immNote('rot', '目前是直向，已使用直向版面；橫放手機可顯示更大的數字。'); 
+  if ((window.innerHeight > window.innerWidth)) immNote('rot', '目前是直向。若手機無法自動轉橫（可能開了「直向鎖定」），可按「旋轉畫面」。'); 
 };
 function immClose(refocus = true) {
   if (!IMM.open) return;
@@ -1770,6 +1785,19 @@ ACT['imm-mode'] = el => {
   IMM.mode = el.dataset.mode === 'remaining' ? 'remaining' : 'elapsed';
   try { localStorage.setItem('neko.immMode', IMM.mode); } catch (_) {}
   IMM.last = ''; paintImm(); immSetCtl(true, 6000);
+};
+/* Fallback for phones whose OS rotation is locked / unsupported: rotate the VIEW with CSS (portrait only). Does not touch the timer. */
+function immApplyRot() {
+  const d = immEl(); if (!d) return;
+  d.classList.toggle('rot-cw', IMM.rot === 90); d.classList.toggle('rot-ccw', IMM.rot === -90);
+  const b = document.getElementById('immRot'); if (b) { b.setAttribute('aria-pressed', String(IMM.rot !== 0)); b.lastChild.textContent = ' 旋轉畫面：' + (IMM.rot === 90 ? '向右' : IMM.rot === -90 ? '向左' : '關'); }
+}
+ACT['imm-rot'] = () => {
+  IMM.rot = IMM.rot === 0 ? 90 : IMM.rot === 90 ? -90 : 0;
+  try { localStorage.setItem('neko.immRot', String(IMM.rot)); } catch (_) {}
+  immApplyRot(); immSetCtl(true, 6000);
+  if (IMM.rot) { immNote('rot', ''); immNote('ori', ''); }
+  immNote('rotinfo', IMM.rot ? '已旋轉畫面：請把手機橫放，讓數字正立。若方向相反，再按一次切換。' : '');
 };
 ACT['imm-pp'] = () => { const T = S.timer; if (!T) return; if (T.state === 'running') ACT['t-pause'](); else if (T.state === 'paused') ACT['t-resume'](); immSetCtl(true, 6000); };
 /* ---- painting: pure function of S.timer + clock ---- */
