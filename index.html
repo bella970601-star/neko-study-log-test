@@ -1460,7 +1460,7 @@ function openSubjects() {
 function openBackup() {
   const lastExp = S.settings.lastExportAt;
   openModal({ title: '資料與備份', wide: true, html: `
-  <div class="notice ${repo.kind === 'memory' ? 'bad' : 'warn'}" style="margin-bottom:14px">${repo.kind === 'memory' ? `<b>目前無法使用瀏覽器儲存。</b>${storageProblem ? '（' + esc(storageProblem.message) + '）' : ''} 資料只存在這個分頁，關閉就會消失，請勤匯出備份。` : (CLOUD.session ? `<b>你的資料存在這台裝置，並會自動同步到你的私人雲端。</b>但同步不等於備份：誤刪的資料也會一起從其他裝置消失。仍建議定期匯出 JSON 備份。` : `<b>你的資料存在這台裝置的瀏覽器（IndexedDB）裡。</b>目前沒有登入雲端，所以不會同步到其他裝置，也不是雲端備份。清除瀏覽器網站資料、更換瀏覽器／使用者設定檔、或裝置損壞，都可能讓資料消失。建議定期匯出 JSON 備份，或登入雲端同步。`)}</div>
+  <div class="notice ${repo.kind === 'memory' ? 'bad' : 'warn'}" id="backupNotice" style="margin-bottom:14px">${backupNoticeHtml()}</div>
   <div class="list" id="cloudBox">${cloudBoxHtml()}</div>
   <div class="list" style="margin-top:10px"><div class="item"><div class="body"><div class="title">匯出完整備份（JSON）</div><div class="small muted">包含科目、待辦、讀書紀錄。${lastExp ? '上次匯出：' + dateKey(lastExp) + ' ' + fmtTime(lastExp) : '尚未匯出過。'}</div></div><button class="btn primary" data-act="export-json">${icon('download')} 匯出</button></div>
   <div class="item"><div class="body"><div class="title">匯出讀書紀錄（CSV）</div><div class="small muted">可用 Excel／試算表開啟，僅供檢視與分析，無法還原。</div></div><button class="btn" data-act="export-csv">${icon('download')} 匯出</button></div>
@@ -1981,7 +1981,7 @@ async function cloudCounts() {
 
 /* ---------- UI: a section inside 「資料與備份」 ---------- */
 function cloudBoxHtml() {
-  const head = `<div class="title">雲端同步 <span class="tag">測試中</span></div>`;
+  const head = `<div class="title">雲端同步</div>`;
   if (CLOUD.loadError) return `<div class="item"><div class="body">${head}<div class="small muted">雲端功能無法載入（${esc(CLOUD.loadError)}）。不影響本機使用。</div></div></div>`;
   if (!CLOUD.ready) return `<div class="item"><div class="body">${head}<div class="small muted">檢查登入狀態…</div></div></div>`;
   const msg = CLOUD.msg ? `<div class="notice ${CLOUD.msg.kind === 'bad' ? 'bad' : ''}" style="margin-top:10px" role="status">${esc(CLOUD.msg.text)}</div>` : '';
@@ -2043,7 +2043,8 @@ function conflictHtml(C) {
   }
   return `<div class="cfcard" role="group" aria-label="${esc(name)}"><div class="cfname">${esc(name)}</div>${body}<div class="actions" style="margin-top:8px;flex-wrap:wrap"><button class="btn" data-act="cf-mine" data-key="${esc(C.key)}">${mine}</button><button class="btn" data-act="cf-theirs" data-key="${esc(C.key)}">${theirs}</button></div><div class="small muted" style="margin-top:4px">沒被選中的版本，雲端仍保有歷史紀錄。</div></div>`;
 }
-function refreshCloudBox() { const el = $('#cloudBox'); if (el) el.innerHTML = cloudBoxHtml(); }
+function backupNoticeHtml() { return `${repo.kind === 'memory' ? `<b>目前無法使用瀏覽器儲存。</b>${storageProblem ? '（' + esc(storageProblem.message) + '）' : ''} 資料只存在這個分頁，關閉就會消失，請勤匯出備份。` : (CLOUD.session ? `<b>你的資料存在這台裝置，並會自動同步到你的私人雲端。</b>但同步不等於備份：誤刪的資料也會一起從其他裝置消失。仍建議定期匯出 JSON 備份。` : `<b>你的資料存在這台裝置的瀏覽器（IndexedDB）裡。</b>目前沒有登入雲端，所以不會同步到其他裝置，也不是雲端備份。清除瀏覽器網站資料、更換瀏覽器／使用者設定檔、或裝置損壞，都可能讓資料消失。建議定期匯出 JSON 備份，或登入雲端同步。`)}`; }
+function refreshCloudBox() { const el = $('#cloudBox'); if (el) el.innerHTML = cloudBoxHtml(); const nb = $('#backupNotice'); if (nb) nb.innerHTML = backupNoticeHtml(); }
 
 /* ---------- actions ---------- */
 FORMS['cloud-login'] = async f => {
