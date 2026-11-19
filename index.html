@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-180.png"><link rel="manifest" href="manifest.webmanifest">
 <title>Neko Study Log</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Great+Vibes&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Great+Vibes&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;500;600&display=swap">
 <style>/* Neko Study Log v1.2 — Dark academic journal × Japanese editorial × vintage stationery */
 :root{
   --bg-primary:#111B2B; --bg-secondary:#1C2C42; --bg-elevated:#24354D; --blue-muted:#314A67; --blue-soft:#8EA8C4;
@@ -25,10 +25,10 @@
   --fg:var(--text-primary); --fg2:var(--text-secondary); --rule:var(--border-subtle); --rule2:var(--rule-soft);
   --field:rgba(10,17,29,.55); --field-bd:rgba(198,175,136,.45); --chip:rgba(49,74,103,.55); --hover:rgba(198,175,136,.10);
   --accent:var(--gold); --focus:#E8D9B8; --track:rgba(244,239,230,.14); --btn-p-bg:var(--ivory); --btn-p-fg:#1C2C42;
-  --serif:"Noto Serif TC","Source Han Serif TC","Songti TC","Hiragino Mincho ProN","PMingLiU","Georgia",serif;
+  --serif:"Noto Serif TC","Noto Serif CJK TC","Source Han Serif TC","Songti TC","Hiragino Mincho ProN","PMingLiU","Georgia",serif;
   --latin:"Cormorant Garamond","Cormorant","Iowan Old Style","Palatino Linotype","Palatino","Georgia",serif;
   --script:"Great Vibes","Pinyon Script","Snell Roundhand","Apple Chancery","Segoe Script","Lucida Handwriting","Brush Script MT","Georgia",cursive;
-  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Hiragino Sans CNS",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --sans:"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei","Hiragino Sans CNS",system-ui,-apple-system,"Segoe UI",sans-serif;
   --r:6px; --waves:none;
 }
 .paper,.modal{
@@ -47,7 +47,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
    var(--bg-primary)}
 body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;mix-blend-mode:soft-light;
   background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E")}
-h1,h2,h3{font-family:var(--serif);font-weight:600;margin:0;color:var(--fg);letter-spacing:.06em}
+h1,h2,h3{font-family:var(--serif);font-weight:500;margin:0;color:var(--fg);letter-spacing:.06em}
 h1{font-size:25px;line-height:1.3} h2{font-size:18px;line-height:1.35} h3{font-size:15px}
 p{margin:0}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -91,7 +91,7 @@ a{color:inherit}
 .mini-timer.on{display:block}
 .mini-timer b{font-family:var(--latin);font-variant-numeric:tabular-nums;font-size:22px;display:block;line-height:1.15}
 .mini-timer span{font-size:12px;color:var(--fg2)}
-main{padding:20px 40px 72px;max-width:1280px;width:100%;margin:0 auto;position:relative}
+main{padding:20px 40px 72px;max-width:1280px;width:100%;margin:0 auto;position:relative;overflow-x:clip}
 .topbar,.bottomnav{display:none}
 .bg-waves{position:fixed;left:244px;right:0;bottom:0;height:150px;z-index:-1;pointer-events:none;opacity:.2;background-image:var(--waves);background-size:60px 30px;-webkit-mask-image:linear-gradient(to top,#000,transparent);mask-image:linear-gradient(to top,#000,transparent)}
 
@@ -108,7 +108,7 @@ main{padding:20px 40px 72px;max-width:1280px;width:100%;margin:0 auto;position:r
 .page-head .blossom{position:absolute;right:-10px;top:-24px;width:330px;max-width:40%;z-index:0;opacity:.96}
 .page-head .blossom.sm{width:210px;top:-14px}
 .actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.grid2{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}
+.grid2{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}.grid2>*{min-width:0}
 .stack{display:flex;flex-direction:column;gap:18px}
 
 /* ---- surfaces ---- */
@@ -140,22 +140,30 @@ main{padding:20px 40px 72px;max-width:1280px;width:100%;margin:0 auto;position:r
 .muted{color:var(--fg2)} .small{font-size:13px}
 
 /* summary strip */
-.strip{display:flex;align-items:stretch;gap:0;padding:14px 20px 14px 14px;flex-wrap:wrap}
+.strip{display:flex;align-items:stretch;gap:12px 0;padding:14px 20px 14px 14px;flex-wrap:wrap;container:strip/inline-size}
 .datenote{position:relative;flex:none;width:112px;margin:-6px 14px -6px 0;padding:8px 6px 6px;text-align:center;background:var(--paper);color:var(--text-dark);transform:rotate(-3deg);box-shadow:0 8px 16px rgba(0,0,0,.4);border-radius:2px;
   clip-path:polygon(0 3px,6% 0,14% 2px,26% 0,40% 3px,55% 0,70% 2px,84% 0,100% 3px,100% calc(100% - 2px),94% 100%,80% calc(100% - 3px),64% 100%,48% calc(100% - 2px),30% 100%,14% calc(100% - 3px),0 100%)}
 .datenote .m{font-family:var(--latin);font-size:16px;font-style:italic}
 .datenote .d{font-family:var(--latin);font-size:42px;font-style:italic;line-height:1;font-weight:500}
 .datenote .w{font-family:var(--latin);font-size:16px;font-style:italic}
 .datenote .sp{position:absolute;right:-2px;bottom:6px;width:46px;opacity:.9}
-.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;flex:1;min-width:0}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;flex:1 1 450px;min-width:0}
 .tiles .tile{padding:2px 18px;display:flex;flex-direction:column;justify-content:center}
 .tiles .tile:first-child{padding-left:6px}
 .tiles .tile+.tile{border-left:1px solid var(--rule)}
-.tile .k{font-size:12.5px;color:var(--gold);letter-spacing:.12em}
+.tile .k{font-family:var(--serif);font-weight:500;font-size:13px;color:var(--gold);letter-spacing:.1em}
 .tile .v{font-family:var(--latin);font-size:32px;font-weight:500;line-height:1.2;font-variant-numeric:tabular-nums;color:var(--ivory);letter-spacing:.02em}
-.tile .v .small{font-family:var(--sans);font-weight:400;font-size:13px;color:var(--fg2);letter-spacing:0}
+.tile .v .small{font-family:var(--serif);font-weight:500;font-size:14px;color:var(--fg2);letter-spacing:.04em}
+/* v1.3.5 typography: Latin serif numerals + Chinese serif units, split into .n / .u so they can differ in size but share a baseline */
+.dq{white-space:nowrap}
+.dq .n{font-family:var(--latin);font-weight:500;font-variant-numeric:lining-nums tabular-nums;font-feature-settings:"lnum" 1,"tnum" 1}
+.dq .u{font-family:var(--serif);font-weight:500;font-size:max(.44em,12.5px);letter-spacing:.06em;color:var(--fg)}
+.tile .v .unset{font-family:var(--serif);font-weight:500;font-size:.72em;letter-spacing:.1em;color:var(--ivory)}
+.tile .v,.dur,.date-head small,.cal button b{font-variant-numeric:lining-nums tabular-nums;font-feature-settings:"lnum" 1,"tnum" 1}
+.welcome b{font-family:var(--serif);font-weight:500;font-size:1.1em;letter-spacing:.06em;color:var(--ivory)}
+.welcome b .latin{white-space:nowrap;font-weight:600;font-size:1.14em;letter-spacing:.03em}
 .tile .s{font-size:12.5px;color:var(--fg2)}
-.strip .go{align-self:center;margin-left:14px}
+.strip .go{align-self:center;margin-left:14px;flex:none;white-space:nowrap}
 .progress{height:4px;border-radius:99px;background:var(--track);overflow:hidden;margin-top:6px}
 .progress>i{display:block;height:100%;background:var(--ivory);border-radius:99px}
 
@@ -236,7 +244,7 @@ input[type=checkbox],input[type=radio]{accent-color:#24354D}
 .check:hover{border-color:var(--ivory)} .paper .check:hover{border-color:#24354D}
 .check.on{background:var(--gold);border-color:var(--gold);color:#1B2433}
 .paper .check.on{background:#24354D;border-color:#24354D;color:var(--paper)}
-.date-head{font-family:var(--serif);font-weight:600;margin:16px 0 2px;display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:4px 6px;background:linear-gradient(90deg,rgba(49,74,103,.55),transparent);letter-spacing:.05em}
+.date-head{font-family:var(--serif);font-weight:500;margin:16px 0 2px;display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:4px 6px;background:linear-gradient(90deg,rgba(49,74,103,.55),transparent);letter-spacing:.05em}
 .date-head:first-child{margin-top:2px}
 .date-head small{font-family:var(--latin);font-weight:600;color:var(--gold);font-size:15px;letter-spacing:.04em}
 .dots{letter-spacing:1px;color:var(--gold);font-size:11px}
@@ -362,7 +370,7 @@ input[type=checkbox],input[type=radio]{accent-color:#24354D}
   .bottomnav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;background:rgba(12,19,32,.97);border-top:1px solid var(--rule);z-index:30;padding:3px 4px calc(3px + env(safe-area-inset-bottom))}
   .bottomnav a{display:flex;flex-direction:column;align-items:center;gap:0;padding:5px 2px;color:var(--fg2);text-decoration:none;font-size:11.5px;border-radius:3px;min-height:50px;justify-content:center}
   .bottomnav a[aria-current=page]{color:var(--ivory);font-weight:700;background:var(--blue-muted);box-shadow:inset 0 0 0 1px var(--gold-muted)}
-  .grid2{grid-template-columns:1fr}
+  .grid2{grid-template-columns:minmax(0,1fr)}
   .page-head{min-height:0;padding-bottom:10px;margin-bottom:12px}
   .page-head .blossom{display:none}
   .ph-title .script{font-size:34px}
@@ -379,7 +387,7 @@ input[type=checkbox],input[type=radio]{accent-color:#24354D}
   .strip{padding:12px 14px}
   .strip .go{width:100%;margin:12px 0 0}
   .tiles .tile{padding:2px 9px}
-  .tile .v{font-size:23px}.tile .k{font-size:12px;letter-spacing:.04em}.tile .s{font-size:11.5px}
+  .tile .v{font-size:28px}.tile .k{font-size:12.5px;letter-spacing:.06em}.tile .s{font-size:11.5px}
   .modal{padding:16px}
   .empty .art{width:64px}
   .ph-title .script{font-size:30px}
@@ -395,11 +403,24 @@ input[type=checkbox],input[type=radio]{accent-color:#24354D}
 .page-head .blossom{width:290px}
 .sec-script{font-size:25px}
 .card-head h2{flex-wrap:nowrap}
-.tile .v{white-space:nowrap;font-size:27px}.tile .k{white-space:nowrap;font-size:12px;letter-spacing:.06em}
+.tile .v{white-space:normal;overflow-wrap:anywhere;font-size:32px;line-height:1.2}.tile .k{white-space:normal;line-height:1.45}
 .tile .v .small{white-space:nowrap}
 .datenote{width:88px}.datenote .d{font-size:36px}.datenote .m,.datenote .w{font-size:14px}.datenote .sp{display:none}
 .strip .go{margin-left:10px;padding:8px 14px;font-size:15px;min-height:42px}
 .tiles .tile{padding:2px 12px}
+/* v1.3.4 responsive strip: layout follows the card's real width, not the viewport.
+ * (widths = strip content box) >=720: date | 3 columns | button;  552-719: date | 3 columns, button on its own row;  450-551: no date, 3 columns
+ * narrow: no date note, tiles become stacked rows, full-width button */
+@container strip (max-width:719px){.strip .go{flex:1 1 100%;margin-left:0}.tiles{margin-right:0}}
+@container strip (max-width:551px){.datenote{display:none}}
+@container strip (max-width:449px){
+  .tiles{grid-template-columns:1fr}
+  .tiles .tile,.tiles .tile:first-child{padding:8px 4px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;column-gap:12px;border-left:0}
+  .tiles .tile+.tile{border-top:1px solid var(--rule)}
+  .tiles .tile .k{grid-column:1;grid-row:1}.tiles .tile .v{grid-column:2;grid-row:1 / span 2;text-align:right}
+  .tiles .tile .s{grid-column:1;grid-row:2}
+  .tiles .tile .progress{grid-column:1 / -1}
+}
 .ring{margin-bottom:26px}
 .dial-top{margin-top:2px}
 @media(max-width:560px){.card-head h2{flex-wrap:wrap;gap:0 8px}.sec-script{font-size:21px}.ph-row{gap:8px}}
@@ -519,6 +540,15 @@ const fmtDur = m => {
   if (m < 60) return `${m} 分鐘`;
   const h = Math.floor(m / 60), r = m % 60;
   return r ? `${h} 小時 ${r} 分` : `${h} 小時`;
+};
+/** Same wording as fmtDur, but numerals and units are separate spans so CSS can style them (Latin serif numerals + Chinese serif units). HTML-safe: only digits/fixed words. */
+const durHtml = m => {
+  if (m == null || isNaN(m)) return '—';
+  m = Math.round(m);
+  const q = (n, u) => `<span class="dq"><span class="n">${n}</span> <span class="u">${u}</span></span>`;
+  if (m < 60) return q(m, '分鐘');
+  const h = Math.floor(m / 60), r = m % 60;
+  return r ? `${q(h, '小時')} ${q(r, '分')}` : q(h, '小時');
 };
 const fmtClock = ms => {
   const s = Math.max(0, Math.floor(ms / 1000)), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
@@ -1162,7 +1192,7 @@ function taskRow(t) {
 function sessionRow(s, withDate) {
   const t = s.taskId && taskById(s.taskId);
   const range = s.startAt && s.endAt ? `${dateKey(s.startAt) !== dateKey(s.endAt) ? fmtDateShort(dateKey(s.startAt)) + ' ' : ''}${fmtTime(s.startAt)}–${dateKey(s.startAt) !== dateKey(s.endAt) ? fmtDateShort(dateKey(s.endAt)) + ' ' : ''}${fmtTime(s.endAt)}` : '';
-  return `<div class="item entry" style="--c:${esc(subjectColor(s.subjectId))}"><div class="body"><div class="title">${esc(s.content || '（未填內容）')}</div><div class="meta"><b class="dur">${fmtDur(s.durationMinutes)}</b>${subjChip(s.subjectId)}${withDate ? `<span>${fmtDateShort(s.studyDate)}</span>` : ''}<span class="tag">${s.source === 'timer' ? '計時' : '手動'}</span>${range ? `<span>${range}</span>` : ''}${t ? `<span>待辦：${esc(t.title)}</span>` : ''}${s.concentrationRating ? `<span class="dots" title="專注度 ${s.concentrationRating}/5" aria-label="專注度 ${s.concentrationRating} / 5">${'●'.repeat(s.concentrationRating)}${'○'.repeat(5 - s.concentrationRating)}</span>` : ''}</div>${s.notes ? `<div class="small muted" style="margin-top:3px;overflow-wrap:anywhere">${esc(s.notes)}</div>` : ''}</div>
+  return `<div class="item entry" style="--c:${esc(subjectColor(s.subjectId))}"><div class="body"><div class="title">${esc(s.content || '（未填內容）')}</div><div class="meta"><b class="dur">${durHtml(s.durationMinutes)}</b>${subjChip(s.subjectId)}${withDate ? `<span>${fmtDateShort(s.studyDate)}</span>` : ''}<span class="tag">${s.source === 'timer' ? '計時' : '手動'}</span>${range ? `<span>${range}</span>` : ''}${t ? `<span>待辦：${esc(t.title)}</span>` : ''}${s.concentrationRating ? `<span class="dots" title="專注度 ${s.concentrationRating}/5" aria-label="專注度 ${s.concentrationRating} / 5">${'●'.repeat(s.concentrationRating)}${'○'.repeat(5 - s.concentrationRating)}</span>` : ''}</div>${s.notes ? `<div class="small muted" style="margin-top:3px;overflow-wrap:anywhere">${esc(s.notes)}</div>` : ''}</div>
   <div class="ops"><button class="iconbtn" data-act="edit-session" data-id="${s.id}" title="編輯" aria-label="編輯紀錄">${icon('edit')}</button><button class="iconbtn del" data-act="del-session" data-id="${s.id}" title="刪除" aria-label="刪除紀錄">${icon('trash')}</button></div></div>`;
 }
 
@@ -1183,12 +1213,12 @@ function viewDashboard() {
   const MON = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'], [, tm, td] = today.split('-').map(Number);
   return pageHead({ script: "Today's Overview", eyebrow: enDate(today), title: '今日總覽', sub: `${fmtDateLong(today)}　${greet}`, actions: `<button class="btn" data-act="add-session">${icon('plus')} 新增讀書紀錄</button>` }) + `
   ${timerBanner}
-  ${first ? `<div class="welcome"><div class="art deco">${artSprig()}</div><p><b>歡迎來到 Neko Study Log。</b>先建立第一個科目（例如「工程數學」），就能新增待辦、開始計時、記錄讀書時間。資料只存在這台裝置的瀏覽器裡。</p><button class="btn primary" data-act="subjects">${icon('tag')} 建立第一個科目</button></div>` : ''}
+  ${first ? `<div class="welcome"><div class="art deco">${artSprig()}</div><p><b>歡迎來到 <span class="latin">Neko Study Log</span>。</b>先建立第一個科目（例如「工程數學」），就能新增待辦、開始計時、記錄讀書時間。資料只存在這台裝置的瀏覽器裡。</p><button class="btn primary" data-act="subjects">${icon('tag')} 建立第一個科目</button></div>` : ''}
   <div class="grid2"><div class="stack">
     <section class="card strip" aria-label="今日進度"><div class="datenote deco" aria-hidden="true"><div class="m">${EN_MON[tm - 1].slice(0, 3)}</div><div class="d">${td}</div><div class="w">${EN_WD[dow(today)].slice(0, 3)}</div></div><div class="tiles">
-      <div class="tile"><div class="k">今日已記錄</div><div class="v">${fmtDur(Math.round(mins))}</div><div class="s">${S.sessions.length ? '來自實際的讀書紀錄' : '還沒有紀錄'}</div></div>
-      <div class="tile"><div class="k">今日目標（選填）</div><div class="v">${target ? fmtDur(target) : '未設定'}</div><div class="s"><button class="btn ghost sm" style="padding:0 4px;min-height:24px;color:var(--gold)" data-act="set-target">${target ? '調整' : '設定'}</button></div>${target ? `<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="${target}" aria-valuenow="${Math.min(Math.round(mins), target)}"><i style="width:${clamp(mins / target * 100, 0, 100)}%"></i></div>` : ''}</div>
-      <div class="tile"><div class="k">待辦完成</div><div class="v">${doneToday}<span class="muted small"> 項今日完成</span></div><div class="s">今日計畫 ${planned.filter(t => t.status === 'done').length}/${planned.length}</div></div></div><a class="btn primary lg go" href="#timer" data-act="goto-timer">${icon('play')} 開始專注</a></section>
+      <div class="tile"><div class="k">今日已記錄</div><div class="v">${durHtml(Math.round(mins))}</div><div class="s">${S.sessions.length ? '來自實際的讀書紀錄' : '還沒有紀錄'}</div></div>
+      <div class="tile"><div class="k">今日目標（選填）</div><div class="v">${target ? durHtml(target) : '<span class="unset">未設定</span>'}</div><div class="s"><button class="btn ghost sm" style="padding:0 4px;min-height:24px;color:var(--gold)" data-act="set-target">${target ? '調整' : '設定'}</button></div>${target ? `<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="${target}" aria-valuenow="${Math.min(Math.round(mins), target)}"><i style="width:${clamp(mins / target * 100, 0, 100)}%"></i></div>` : ''}</div>
+      <div class="tile"><div class="k">待辦完成</div><div class="v"><span class="dq"><span class="n">${doneToday}</span> <span class="u">項今日完成</span></span></div><div class="s">今日計畫 ${planned.filter(t => t.status === 'done').length}/${planned.length}</div></div></div><a class="btn primary lg go" href="#timer" data-act="goto-timer">${icon('play')} 開始專注</a></section>
     <section class="card paper taped">${artPaperclip('clip deco')}<div class="card-head"><h2><span class="sec-script deco" aria-hidden="true">Today's Plan</span>今日計畫</h2><a class="btn sm" href="#tasks">全部待辦</a></div>
       <form data-form="quick-task" class="actions" style="margin-bottom:6px;flex-wrap:nowrap"><label class="sr" for="qt">快速新增今日待辦</label><input id="qt" type="text" name="title" maxlength="120" placeholder="今天要做什麼？例：完成第 3 章習題 1–10" autocomplete="off"><button class="btn primary" type="submit">${icon('plus')}<span class="sr">新增</span></button></form>
       ${planned.length ? `<div class="list">${planned.map(taskRow).join('')}</div>` : emptyState('今天還沒有安排', '寫下一件具體、做得完的小事就好。', '', 'sprig')}
@@ -1342,7 +1372,7 @@ function viewLog() {
   const total = list.reduce((a, s) => a + s.durationMinutes, 0);
   return pageHead({ script: 'Study Journal', eyebrow: 'Records', title: '讀書紀錄', sub: `${f.day ? fmtDateLong(f.day) : fmtMonth(ym)}　共 ${list.length} 筆，${fmtDur(total)}`, actions: `<button class="btn" data-act="export-csv">${icon('download')} 匯出 CSV</button><button class="btn primary" data-act="add-session">${icon('plus')} 新增紀錄</button>`, big: false }) + `
   <div class="grid2"><section class="card"><div class="filters" style="margin-bottom:6px"><select data-filter="logF.subject" aria-label="科目篩選"><option value="">所有科目</option>${S.subjects.map(s => `<option value="${s.id}" ${f.subject === s.id ? 'selected' : ''}>${esc(s.name)}${s.archivedAt ? '（封存）' : ''}</option>`).join('')}</select>${f.day ? `<button class="btn sm" data-act="clear-day">清除日期篩選</button>` : ''}</div>
-    ${list.length ? Object.entries(groups).map(([d, arr]) => `<div class="date-head"><span>${fmtDateLong(d)}</span><small>${fmtDur(arr.reduce((a, s) => a + s.durationMinutes, 0))}</small></div><div class="list">${arr.map(s => sessionRow(s, false)).join('')}</div>`).join('') : emptyState(S.sessions.length ? '這段期間沒有紀錄' : '還沒有讀書紀錄', S.sessions.length ? '換個月份或清除篩選看看。' : '開始一次計時，或手動新增剛才讀的內容。', `<button class="btn primary sm" data-act="add-session">${icon('plus')} 新增紀錄</button>`, S.sessions.length ? 'none' : 'books')}</section>
+    ${list.length ? Object.entries(groups).map(([d, arr]) => `<div class="date-head"><span>${fmtDateLong(d)}</span><small>${durHtml(arr.reduce((a, s) => a + s.durationMinutes, 0))}</small></div><div class="list">${arr.map(s => sessionRow(s, false)).join('')}</div>`).join('') : emptyState(S.sessions.length ? '這段期間沒有紀錄' : '還沒有讀書紀錄', S.sessions.length ? '換個月份或清除篩選看看。' : '開始一次計時，或手動新增剛才讀的內容。', `<button class="btn primary sm" data-act="add-session">${icon('plus')} 新增紀錄</button>`, S.sessions.length ? 'none' : 'books')}</section>
   <section class="card paper taped">${artBinder('clip deco')}<div class="card-head"><div class="monthnav"><button class="iconbtn" data-act="month" data-n="-1" aria-label="上個月">${icon('left')}</button><b>${fmtMonth(ym)}</b><button class="iconbtn" data-act="month" data-n="1" aria-label="下個月">${icon('right')}</button></div><button class="btn sm" data-act="this-month">本月</button></div>
     <div class="cal" role="group" aria-label="月曆">${'一二三四五六日'.split('').map(c => `<div class="dn">${c}</div>`).join('')}${cells}</div><p class="small muted" style="margin-top:10px">格內為當天累計分鐘；點日期可只看當天。跨午夜的計時紀錄會依實際時間分到兩天。</p></section></div>`;
 }
@@ -1447,9 +1477,9 @@ function viewAnalytics() {
   const sl = Object.entries(subj).sort((a, b) => b[1] - a[1]);
   return head + `<div class="stack">
   <section class="card"><div class="tiles stat-grid">
-    <div class="tile"><div class="k">近 ${R} 天總時間</div><div class="v">${total ? fmtDur(Math.round(total)) : '—'}</div><div class="s">${total ? '' : '此期間沒有紀錄'}</div></div>
+    <div class="tile"><div class="k">近 ${R} 天總時間</div><div class="v">${total ? durHtml(Math.round(total)) : '—'}</div><div class="s">${total ? '' : '此期間沒有紀錄'}</div></div>
     <div class="tile"><div class="k">有讀書的天數</div><div class="v">${activeDays}<span class="muted small"> / ${R} 天</span></div><div class="s">&nbsp;</div></div>
-    <div class="tile"><div class="k">有讀書那天的平均</div><div class="v">${activeDays ? fmtDur(Math.round(total / activeDays)) : '—'}</div><div class="s">${activeDays && activeDays < 3 ? '天數很少，僅供參考' : '&nbsp;'}</div></div>
+    <div class="tile"><div class="k">有讀書那天的平均</div><div class="v">${activeDays ? durHtml(Math.round(total / activeDays)) : '—'}</div><div class="s">${activeDays && activeDays < 3 ? '天數很少，僅供參考' : '&nbsp;'}</div></div>
     <div class="tile"><div class="k">平均專注度（1–5）</div><div class="v">${avgC != null ? avgC.toFixed(1) : '—'}</div><div class="s">${rated.length ? `依 ${rated.length} 筆有評分的紀錄${rated.length < 5 ? '（樣本少，僅供參考）' : ''}` : '尚無評分，未評分不當作 0'}</div></div></div></section>
   <section class="card"><div class="card-head"><h2>每日讀書時間</h2><span class="small muted">最近 ${nd} 天 ・ 圓點＝無紀錄</span></div>${chartBox({ items: daily }, `最近 ${nd} 天每日讀書時間`)}</section>
   <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
